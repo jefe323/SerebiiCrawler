@@ -13,16 +13,16 @@ namespace SerebiiCrawler
         {
             Console.Title = "Serebii Crawler";
 
-            Console.WriteLine("Serebii Crawler\nv0.1\n\n");
+            Console.WriteLine("Serebii Crawler\nv0.2\n\n");
             Console.Write("Press any key to start!");
             Console.ReadLine();
             Console.WriteLine();
 
             using (var client = new WebClient())
             {
-                string check = "<td align=\"center\" class=\"pkmn\">";
+                string check = "<td class=\"foo\">Effort Values Earned</td>";
                 string output = "";
-                int maxValue = 649;
+                int maxValue = 718;
 
                 for (int k = 1; k <= maxValue; k++)
                 {
@@ -64,23 +64,51 @@ namespace SerebiiCrawler
                             if (!dExists) { Directory.CreateDirectory("(494 - 649) Unova"); }
                             dCurrent = "(494 - 649) Unova\\";
                         }
+                        if (Convert.ToInt32(value) <= 718 && Convert.ToInt32(value) >= 650)
+                        {
+                            bool dExists = Directory.Exists("(650 - 718) Kalos");
+                            if (!dExists) { Directory.CreateDirectory("(650 - 718) Unova"); }
+                            dCurrent = "(650 - 718) Unova\\";
+                        }
                     }
                     catch (Exception fail) { Console.WriteLine(fail.Message); } 
 
                     try
                     {
-                        string content = client.DownloadString("http://www.serebii.net/pokedex-bw/" + value + ".shtml");
+                        //pull image
+                        client.DownloadFile("http://www.serebii.net/xy/pokemon/" + value + ".png", dCurrent + value + ".png");
+
+                        string content = client.DownloadString("http://www.serebii.net/pokedex-xy/" + value + ".shtml");
                         content.Trim();
 
+                        string name = string.Empty;
+
                         string[] result = content.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                        for (int l = 0; l < result.Length; l++)
+                        {
+                            if (result[l].Contains("<title>"))
+                            {
+                                string[] nameData = result[l].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                                name = nameData[0].Replace("<title>", "").Trim();
+                            }
+                        }
 
                         for (int i = 0; i < result.Length; i++)
                         {
                             if (result[i].Contains(check))
                             {
-                                output = result[i].Replace("<td align=\"center\" class=\"pkmn\"><img src=\"", "").Replace("\" /></td>", "").Trim();
-                                output = "http://www.serebii.net" + output;
-                                client.DownloadFile(output, dCurrent + value + ".png");
+                                output = result[i + 6].Replace("<td class=\"fooinfo\">", "").Replace("</td>", "").Replace("<br /></td><td class=\"fooinfo\">", "").Replace("<br />", " ").Trim();
+                                //Console.WriteLine(output);
+                                if (!File.Exists(dCurrent + "values.txt"))
+                                {
+                                    File.Create(dCurrent + "values.txt").Close();
+                                }
+
+                                using (StreamWriter w = File.AppendText(dCurrent + "values.txt"))
+                                {
+                                    w.WriteLine(value + " " + name + " / Effort Values Earned: " + output);
+                                }
 
                                 double percent = ((double)k / (double)maxValue) * 100;
                                 RenderConsoleProgress((int)Math.Ceiling(percent), '▓', ConsoleColor.Green, k.ToString() + "/" + maxValue + " Completed (" + (int)Math.Ceiling(percent) + "%)");
