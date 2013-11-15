@@ -67,8 +67,8 @@ namespace SerebiiCrawler
                         if (Convert.ToInt32(value) <= 718 && Convert.ToInt32(value) >= 650)
                         {
                             bool dExists = Directory.Exists("(650 - 718) Kalos");
-                            if (!dExists) { Directory.CreateDirectory("(650 - 718) Unova"); }
-                            dCurrent = "(650 - 718) Unova\\";
+                            if (!dExists) { Directory.CreateDirectory("(650 - 718) Kalos"); }
+                            dCurrent = "(650 - 718) Kalos\\S";
                         }
                     }
                     catch (Exception fail) { Console.WriteLine(fail.Message); } 
