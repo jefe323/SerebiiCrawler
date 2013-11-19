@@ -107,7 +107,7 @@ namespace SerebiiCrawler
 
                                 using (StreamWriter w = File.AppendText(dCurrent + "values.txt"))
                                 {
-                                    w.WriteLine(value + " " + name + " / Effort Values Earned: " + output);
+                                    w.WriteLine(value + "\t" + name + "\t" + output);
                                 }
 
                                 double percent = ((double)k / (double)maxValue) * 100;
