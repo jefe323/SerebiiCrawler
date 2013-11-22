@@ -98,7 +98,7 @@ namespace SerebiiCrawler
                         {
                             if (result[i].Contains(check))
                             {
-                                output = result[i + 6].Replace("<td class=\"fooinfo\">", "").Replace("</td>", "").Replace("<br /></td><td class=\"fooinfo\">", "").Replace("<br />", " ").Trim();
+                                output = result[i + 5].Replace("<td class=\"fooinfo\">70</td>", "").Replace("<td class=\"fooinfo\">", "").Replace("</td>", "").Replace("<br /></td><td class=\"fooinfo\">", "").Replace("<br />", " ").Trim();
                                 //Console.WriteLine(output);
                                 if (!File.Exists(dCurrent + "values.txt"))
                                 {
